@@ -11,6 +11,7 @@ import { CanvasHost } from '../canvas/canvas-host';
 import { RoundSelector } from './round-selector';
 import { TeamFilter } from './team-filter';
 import { FloorToggle } from './floor-toggle';
+import { PlaybackScrubber } from './playback-scrubber';
 import { FragFeed } from './frag-feed';
 import { StatsPanel } from './stats-panel';
 import { SelectionDrawer } from './selection-drawer';
@@ -200,6 +201,10 @@ export function DashboardShell() {
                         />
                     </div>
 
+                    {/* Bottom Scrubbing Bar */}
+                    <div className="p-3 shrink-0 bg-neutral-950/90 border-t border-neutral-800 z-10">
+                        <PlaybackScrubber manifest={manifest} />
+                    </div>
                 </div>
 
                 {/* Right Analytics Rail (Hidden on screens < lg, shown on lg+) */}
