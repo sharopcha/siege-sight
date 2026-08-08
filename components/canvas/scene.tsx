@@ -9,6 +9,8 @@ import { usePlaybackStore } from '@/store/playback-store';
 import { Lighting } from './rig/lighting';
 import { CameraRig } from './rig/camera-rig';
 import { PerfGuard } from './rig/pref-guard';
+import { FloorStack } from './environment/floor-stack';
+
 
 export interface SceneProps {
     manifest: MatchManifest;
@@ -56,6 +58,8 @@ export function Scene({ manifest, map, points, frags }: SceneProps) {
                 <Lighting />
                 <CameraRig />
                 <PerfGuard />
+
+                <FloorStack map={map} />
 
             </Canvas>
         </div>
