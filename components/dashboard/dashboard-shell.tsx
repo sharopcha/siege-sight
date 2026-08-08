@@ -1,5 +1,6 @@
 "use client";
 import { useMemo } from 'react';
+import Image from 'next/image';
 import { useActiveMatch } from '@/store/telemetry-store';
 import { packPointCloud, packFragLines } from '@/lib/telemetry/pack';
 import { deriveMatchStats } from '@/lib/telemetry/derive';
@@ -57,9 +58,13 @@ export function DashboardShell() {
                 {/* Left Section: Branding & Match Selector */}
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     <div className="flex items-center gap-2 shrink-0">
-                        <div className="w-7 h-7 rounded bg-blue-600 flex items-center justify-center font-mono font-black text-white text-base shadow-lg shadow-blue-950 border border-blue-400">
-                            S
-                        </div>
+                        <Image
+                            src="/rainbow-six-siege-ico.png"
+                            alt="SiegeSight Logo"
+                            width={32}
+                            height={32}
+                            className="w-8 h-8 object-contain drop-shadow-lg"
+                        />
                         <div className="flex flex-col">
                             <span className="font-mono font-black tracking-wider text-sm text-neutral-100 flex items-center gap-1.5 whitespace-nowrap">
                                 SIEGESIGHT
