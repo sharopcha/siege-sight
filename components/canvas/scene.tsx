@@ -12,6 +12,7 @@ import { PerfGuard } from './rig/pref-guard';
 import { FloorStack } from './environment/floor-stack';
 import { PlayerPointCloud } from './telemetry/player-point-cloud';
 import { PlayerTrajectoryLines } from './telemetry/player-trajectory-lines';
+import { FragLineField } from './telemetry/frag-line-field';
 
 
 
@@ -65,6 +66,7 @@ export function Scene({ manifest, map, points, frags }: SceneProps) {
                 <FloorStack map={map} />
                 <PlayerPointCloud payload={points} />
                 <PlayerTrajectoryLines manifest={manifest} />
+                <FragLineField payload={frags} />
 
 
             </Canvas>
