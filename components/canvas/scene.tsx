@@ -10,6 +10,9 @@ import { Lighting } from './rig/lighting';
 import { CameraRig } from './rig/camera-rig';
 import { PerfGuard } from './rig/pref-guard';
 import { FloorStack } from './environment/floor-stack';
+import { PlayerPointCloud } from './telemetry/player-point-cloud';
+import { PlayerTrajectoryLines } from './telemetry/player-trajectory-lines';
+
 
 
 export interface SceneProps {
@@ -60,6 +63,9 @@ export function Scene({ manifest, map, points, frags }: SceneProps) {
                 <PerfGuard />
 
                 <FloorStack map={map} />
+                <PlayerPointCloud payload={points} />
+                <PlayerTrajectoryLines manifest={manifest} />
+
 
             </Canvas>
         </div>
