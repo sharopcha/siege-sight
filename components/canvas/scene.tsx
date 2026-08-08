@@ -14,8 +14,7 @@ import { PlayerPointCloud } from './telemetry/player-point-cloud';
 import { PlayerTrajectoryLines } from './telemetry/player-trajectory-lines';
 import { FragLineField } from './telemetry/frag-line-field';
 import { PlayerCursorMesh } from './telemetry/player-cursor-mesh';
-
-
+import { GpuMemoryHud } from './debug/gpu-memory-hud';
 
 export interface SceneProps {
     manifest: MatchManifest;
@@ -60,6 +59,7 @@ export function Scene({ manifest, map, points, frags }: SceneProps) {
             >
 
                 <FrameInvalidator />
+                <GpuMemoryHud />
                 <Lighting />
                 <CameraRig />
                 <PerfGuard />
@@ -69,8 +69,6 @@ export function Scene({ manifest, map, points, frags }: SceneProps) {
                 <PlayerTrajectoryLines manifest={manifest} />
                 <FragLineField payload={frags} />
                 <PlayerCursorMesh manifest={manifest} />
-
-
             </Canvas>
         </div>
     );
