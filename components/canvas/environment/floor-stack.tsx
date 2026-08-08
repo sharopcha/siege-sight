@@ -9,6 +9,7 @@ interface FloorStackProps {
 export function FloorStack({ map }: FloorStackProps) {
     const visibleFloors = useFilterStore((s) => s.visibleFloors);
     const showAllPlayersAndLabels = useFilterStore((s) => s.showAllPlayersAndLabels);
+    const show3DWalls = useFilterStore((s) => s.show3DWalls);
 
     return (
         <group>
@@ -27,6 +28,7 @@ export function FloorStack({ map }: FloorStackProps) {
                         roomLabels={map.roomLabelsByFloor[floor.index] || []}
                         isVisible={isFloorVisible}
                         showRoomLabels={shouldShowLabels}
+                        wallHeight={show3DWalls ? 2.5 : 0}
                     />
                 );
             })}

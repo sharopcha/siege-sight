@@ -12,6 +12,7 @@ import {
     RotateCcw,
     Sliders,
     Eye,
+    Box,
 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Switch } from '@/components/ui/switch';
@@ -24,6 +25,8 @@ export function SettingsMenu() {
     const toggleFrags = useFilterStore((s) => s.toggleFrags);
     const showPaths = useFilterStore((s) => s.showPaths);
     const togglePaths = useFilterStore((s) => s.togglePaths);
+    const show3DWalls = useFilterStore((s) => s.show3DWalls);
+    const toggle3DWalls = useFilterStore((s) => s.toggle3DWalls);
     const showAllPlayersAndLabels = useFilterStore((s) => s.showAllPlayersAndLabels);
     const toggleShowAllPlayersAndLabels = useFilterStore((s) => s.toggleShowAllPlayersAndLabels);
     const cameraPreset = useFilterStore((s) => s.cameraPreset);
@@ -154,6 +157,28 @@ export function SettingsMenu() {
                             </button>
                         </div>
 
+                        {/* 3D Walls Switch */}
+                        <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/50 border border-neutral-800">
+                            <div className="flex items-center gap-2">
+                                <div className={`p-1.5 rounded-md ${show3DWalls ? 'bg-orange-950 text-orange-400' : 'bg-neutral-800 text-neutral-500'}`}>
+                                    <Box className="w-4 h-4" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="font-mono text-xs font-semibold">3D Walls</span>
+                                    <span className="text-[10px] text-neutral-400">Extrude wall lines into 3D boxes</span>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={toggle3DWalls}
+                                className={`w-11 h-6 rounded-full transition-colors p-0.5 flex items-center ${
+                                    show3DWalls ? 'bg-orange-600 justify-end' : 'bg-neutral-800 justify-start'
+                                }`}
+                            >
+                                <div className="w-5 h-5 rounded-full bg-white shadow-md transform transition-transform" />
+                            </button>
+                        </div>
+
                         {/* All Floors Overlay Switch */}
                         <div className="flex items-center justify-between p-2.5 rounded-lg bg-neutral-900/50 border border-neutral-800">
                             <div className="flex items-center gap-2">
@@ -191,6 +216,7 @@ export function SettingsMenu() {
                             setCameraPreset('ISOMETRIC');
                             if (!showFrags) toggleFrags();
                             if (!showPaths) togglePaths();
+                            if (!show3DWalls) toggle3DWalls();
                             if (showAllPlayersAndLabels) toggleShowAllPlayersAndLabels();
                         }}
                         className="text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"

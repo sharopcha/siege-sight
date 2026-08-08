@@ -14,6 +14,7 @@ interface FloorPlaneProps {
     isVisible: boolean;
     showRoomLabels?: boolean;
     wallHeight?: number;
+    wallThickness?: number;
 }
 
 export function FloorPlane({
@@ -26,6 +27,7 @@ export function FloorPlane({
     isVisible,
     showRoomLabels = true,
     wallHeight = 0,
+    wallThickness = 0.4,
 }: FloorPlaneProps) {
     const worldY = floor.elevation;
 
@@ -34,26 +36,63 @@ export function FloorPlane({
         if (!walls || walls.length === 0) return { wallPositions: new Float32Array(0), is3D: false };
 
         if (wallHeight > 0) {
-            const pos = new Float32Array(walls.length * 18);
+            const pos = new Float32Array(walls.length * 108); // 12 triangles * 3 vertices * 3 coords
             walls.forEach((w, i) => {
                 const [sx, sy, sz] = toWorldTuple(w.start[0], w.start[1], floor.elevation);
                 const [ex, ey, ez] = toWorldTuple(w.end[0], w.end[1], floor.elevation);
 
-                const bSy = sy + 0.1;
-                const bEy = ey + 0.1;
-                const tSy = bSy + wallHeight;
-                const tEy = bEy + wallHeight;
+                const bY = sy + 0.1;
+                const tY = bY + wallHeight;
 
-                const idx = i * 18;
-                // Triangle 1: StartBottom, EndBottom, StartTop
-                pos[idx] = sx; pos[idx + 1] = bSy; pos[idx + 2] = sz;
-                pos[idx + 3] = ex; pos[idx + 4] = bEy; pos[idx + 5] = ez;
-                pos[idx + 6] = sx; pos[idx + 7] = tSy; pos[idx + 8] = sz;
+                const dx = ex - sx;
+                const dz = ez - sz;
+                const len = Math.sqrt(dx * dx + dz * dz);
+                const nx = len > 0 ? (dz / len) * (wallThickness / 2) : 0;
+                const nz = len > 0 ? (-dx / len) * (wallThickness / 2) : 0;
 
-                // Triangle 2: StartTop, EndBottom, EndTop
-                pos[idx + 9] = sx; pos[idx + 10] = tSy; pos[idx + 11] = sz;
-                pos[idx + 12] = ex; pos[idx + 13] = bEy; pos[idx + 14] = ez;
-                pos[idx + 15] = ex; pos[idx + 16] = tEy; pos[idx + 17] = ez;
+                // 4 corners at bottom
+                const b1x = sx - nx, b1z = sz - nz;
+                const b2x = sx + nx, b2z = sz + nz;
+                const b3x = ex + nx, b3z = ez + nz;
+                const b4x = ex - nx, b4z = ez - nz;
+
+                // 4 corners at top
+                const t1x = sx - nx, t1z = sz - nz;
+                const t2x = sx + nx, t2z = sz + nz;
+                const t3x = ex + nx, t3z = ez + nz;
+                const t4x = ex - nx, t4z = ez - nz;
+
+                const idx = i * 108;
+                let offset = idx;
+
+                const addQuad = (
+                    v1x: number, v1y: number, v1z: number,
+                    v2x: number, v2y: number, v2z: number,
+                    v3x: number, v3y: number, v3z: number,
+                    v4x: number, v4y: number, v4z: number
+                ) => {
+                    // Triangle 1: v1, v2, v3
+                    pos[offset++] = v1x; pos[offset++] = v1y; pos[offset++] = v1z;
+                    pos[offset++] = v2x; pos[offset++] = v2y; pos[offset++] = v2z;
+                    pos[offset++] = v3x; pos[offset++] = v3y; pos[offset++] = v3z;
+                    // Triangle 2: v1, v3, v4
+                    pos[offset++] = v1x; pos[offset++] = v1y; pos[offset++] = v1z;
+                    pos[offset++] = v3x; pos[offset++] = v3y; pos[offset++] = v3z;
+                    pos[offset++] = v4x; pos[offset++] = v4y; pos[offset++] = v4z;
+                };
+
+                // Front face
+                addQuad(b4x, bY, b4z, b1x, bY, b1z, t1x, tY, t1z, t4x, tY, t4z);
+                // Back face
+                addQuad(b2x, bY, b2z, b3x, bY, b3z, t3x, tY, t3z, t2x, tY, t2z);
+                // Left face
+                addQuad(b1x, bY, b1z, b2x, bY, b2z, t2x, tY, t2z, t1x, tY, t1z);
+                // Right face
+                addQuad(b3x, bY, b3z, b4x, bY, b4z, t4x, tY, t4z, t3x, tY, t3z);
+                // Top face
+                addQuad(t1x, tY, t1z, t2x, tY, t2z, t3x, tY, t3z, t4x, tY, t4z);
+                // Bottom face
+                addQuad(b4x, bY, b4z, b3x, bY, b3z, b2x, bY, b2z, b1x, bY, b1z);
             });
             return { wallPositions: pos, is3D: true };
         } else {

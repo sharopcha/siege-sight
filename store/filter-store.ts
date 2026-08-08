@@ -12,6 +12,7 @@ interface FilterState {
     visibleFloors: Set<number>;
     showFrags: boolean;
     showPaths: boolean;
+    show3DWalls: boolean;
     showAllPlayersAndLabels: boolean;
     cameraPreset: CameraPreset;
     isLeftDrawerOpen: boolean;
@@ -29,6 +30,7 @@ interface FilterState {
     setAllFloors: (floors: number[]) => void;
     toggleFrags: () => void;
     togglePaths: () => void;
+    toggle3DWalls: () => void;
     toggleShowAllPlayersAndLabels: () => void;
     setShowAllPlayersAndLabels: (val: boolean) => void;
     setCameraPreset: (preset: CameraPreset) => void;
@@ -45,6 +47,7 @@ export const useFilterStore = create<FilterState>()((set) => ({
     visibleFloors: new Set([-1, 0, 1, 2]),
     showFrags: true,
     showPaths: true,
+    show3DWalls: true,
     showAllPlayersAndLabels: false,
     cameraPreset: 'ISOMETRIC',
     isLeftDrawerOpen: false,
@@ -92,6 +95,7 @@ export const useFilterStore = create<FilterState>()((set) => ({
     setAllFloors: (floors) => set({ visibleFloors: new Set(floors) }),
     toggleFrags: () => set((s) => ({ showFrags: !s.showFrags })),
     togglePaths: () => set((s) => ({ showPaths: !s.showPaths })),
+    toggle3DWalls: () => set((s) => ({ show3DWalls: !s.show3DWalls })),
     toggleShowAllPlayersAndLabels: () => set((s) => ({ showAllPlayersAndLabels: !s.showAllPlayersAndLabels })),
     setShowAllPlayersAndLabels: (showAllPlayersAndLabels) => set({ showAllPlayersAndLabels }),
     setCameraPreset: (cameraPreset) => set({ cameraPreset }),
