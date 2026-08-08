@@ -1,0 +1,400 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Rainbow Six Siege 3D Match Telemetry Contract",
+    "description": "Standardized schema for multi-floor 3D positional telemetry, kills, and match metadata",
+    "type": "object",
+    "required": [
+        "schemaVersion",
+        "matchId",
+        "map",
+        "event",
+        "teams",
+        "rounds",
+        "players",
+        "telemetry",
+        "frags"
+    ],
+    "properties": {
+        "schemaVersion": {
+            "type": "integer",
+            "const": 2,
+            "description": "Schema version indicator. Must be integer 2."
+        },
+        "matchId": {
+            "type": "string",
+            "example": "match_inv_grand_final",
+            "description": "Unique string identifier for the match."
+        },
+        "map": {
+            "type": "string",
+            "enum": [
+                "CLUBHOUSE",
+                "OREGON",
+                "CAFE",
+                "BANK",
+                "BORDER"
+            ],
+            "description": "Map identifier key."
+        },
+        "event": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "date"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "evt_inv_2026"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Six Invitational 2026"
+                },
+                "date": {
+                    "type": "string",
+                    "example": "2026-02-15"
+                }
+            }
+        },
+        "teams": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "name",
+                    "tag",
+                    "side",
+                    "score"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "team_g2"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "G2 Esports"
+                    },
+                    "tag": {
+                        "type": "string",
+                        "example": "G2"
+                    },
+                    "side": {
+                        "type": "string",
+                        "enum": [
+                            "ATTACK",
+                            "DEFEND",
+                            "NEUTRAL"
+                        ]
+                    },
+                    "score": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "logoUrl": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "rounds": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "roundId",
+                    "number",
+                    "winnerTeamId",
+                    "endReason",
+                    "durationSeconds",
+                    "attackerTeamId"
+                ],
+                "properties": {
+                    "roundId": {
+                        "type": "string",
+                        "example": "r_1"
+                    },
+                    "number": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "winnerTeamId": {
+                        "type": "string",
+                        "example": "team_g2"
+                    },
+                    "endReason": {
+                        "type": "string",
+                        "enum": [
+                            "ELIMINATION",
+                            "DEFUSE",
+                            "PLANT_EXPLODE",
+                            "TIME_OUT"
+                        ]
+                    },
+                    "durationSeconds": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "attackerTeamId": {
+                        "type": "string",
+                        "example": "team_g2"
+                    }
+                }
+            }
+        },
+        "players": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "teamId",
+                    "name",
+                    "nickname",
+                    "operator",
+                    "role"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "p_g2_1"
+                    },
+                    "teamId": {
+                        "type": "string",
+                        "example": "team_g2"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Karl Jaenicke"
+                    },
+                    "nickname": {
+                        "type": "string",
+                        "example": "Alem4o"
+                    },
+                    "operator": {
+                        "type": "string",
+                        "example": "Jäger"
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "ATTACKER",
+                            "DEFENDER"
+                        ]
+                    }
+                }
+            }
+        },
+        "telemetry": {
+            "type": "array",
+            "description": "Chronological array of tick-by-tick positional snapshots across all rounds",
+            "items": {
+                "type": "object",
+                "required": [
+                    "tickIndex",
+                    "timestampMs",
+                    "roundId",
+                    "floorId",
+                    "positions"
+                ],
+                "properties": {
+                    "tickIndex": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "timestampMs": {
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "roundId": {
+                        "type": "string",
+                        "example": "r_1"
+                    },
+                    "floorId": {
+                        "type": "string",
+                        "enum": [
+                            "BASEMENT",
+                            "GROUND_FLOOR",
+                            "FIRST_FLOOR",
+                            "ROOF",
+                            "OUTSIDE",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "positions": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "playerId",
+                                "x",
+                                "y",
+                                "z",
+                                "yaw",
+                                "pitch",
+                                "stance",
+                                "health",
+                                "isDead",
+                                "isFiring"
+                            ],
+                            "properties": {
+                                "playerId": {
+                                    "type": "string",
+                                    "example": "p_g2_1"
+                                },
+                                "x": {
+                                    "type": "number",
+                                    "description": "X coordinate in meters"
+                                },
+                                "y": {
+                                    "type": "number",
+                                    "description": "Y coordinate in meters"
+                                },
+                                "z": {
+                                    "type": "number",
+                                    "description": "Height coordinate in meters"
+                                },
+                                "yaw": {
+                                    "type": "number",
+                                    "description": "Facing direction in degrees (0-360)"
+                                },
+                                "pitch": {
+                                    "type": "number",
+                                    "description": "Vertical angle in degrees (-90 to 90)"
+                                },
+                                "stance": {
+                                    "type": "string",
+                                    "enum": [
+                                        "STAND",
+                                        "CROUCH",
+                                        "PRONE"
+                                    ]
+                                },
+                                "health": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 100
+                                },
+                                "isDead": {
+                                    "type": "boolean"
+                                },
+                                "isFiring": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "frags": {
+            "type": "array",
+            "description": "Kill/elimination events occurring during the match",
+            "items": {
+                "type": "object",
+                "required": [
+                    "fragId",
+                    "roundId",
+                    "timestampMs",
+                    "tickIndex",
+                    "killerId",
+                    "victimId",
+                    "weapon",
+                    "distanceMeters",
+                    "isHeadshot",
+                    "isWallbang",
+                    "isCrossFloor",
+                    "killerFloorId",
+                    "victimFloorId",
+                    "position"
+                ],
+                "properties": {
+                    "fragId": {
+                        "type": "string",
+                        "example": "f_101"
+                    },
+                    "roundId": {
+                        "type": "string",
+                        "example": "r_1"
+                    },
+                    "timestampMs": {
+                        "type": "number"
+                    },
+                    "tickIndex": {
+                        "type": "integer"
+                    },
+                    "killerId": {
+                        "type": "string",
+                        "example": "p_g2_1"
+                    },
+                    "victimId": {
+                        "type": "string",
+                        "example": "p_bds_1"
+                    },
+                    "weapon": {
+                        "type": "string",
+                        "example": "416-C CARBINE"
+                    },
+                    "distanceMeters": {
+                        "type": "number"
+                    },
+                    "isHeadshot": {
+                        "type": "boolean"
+                    },
+                    "isWallbang": {
+                        "type": "boolean"
+                    },
+                    "isCrossFloor": {
+                        "type": "boolean"
+                    },
+                    "killerFloorId": {
+                        "type": "string",
+                        "enum": [
+                            "BASEMENT",
+                            "GROUND_FLOOR",
+                            "FIRST_FLOOR",
+                            "ROOF",
+                            "OUTSIDE",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "victimFloorId": {
+                        "type": "string",
+                        "enum": [
+                            "BASEMENT",
+                            "GROUND_FLOOR",
+                            "FIRST_FLOOR",
+                            "ROOF",
+                            "OUTSIDE",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "position": {
+                        "type": "object",
+                        "required": [
+                            "x",
+                            "y",
+                            "z"
+                        ],
+                        "properties": {
+                            "x": {
+                                "type": "number"
+                            },
+                            "y": {
+                                "type": "number"
+                            },
+                            "z": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
