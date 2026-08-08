@@ -6,6 +6,9 @@ import type { MapManifest } from '@/lib/maps/types';
 import { SURFACE_BASE } from '@/lib/maps/palette';
 import { usePlaybackStore } from '@/store/playback-store';
 
+import { Lighting } from './rig/lighting';
+import { CameraRig } from './rig/camera-rig';
+import { PerfGuard } from './rig/pref-guard';
 
 export interface SceneProps {
     manifest: MatchManifest;
@@ -48,7 +51,12 @@ export function Scene({ manifest, map, points, frags }: SceneProps) {
                     gl.setClearColor(SURFACE_BASE);
                 }}
             >
+
                 <FrameInvalidator />
+                <Lighting />
+                <CameraRig />
+                <PerfGuard />
+
             </Canvas>
         </div>
     );
