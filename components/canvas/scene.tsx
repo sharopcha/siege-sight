@@ -13,6 +13,7 @@ import { FloorStack } from './environment/floor-stack';
 import { PlayerPointCloud } from './telemetry/player-point-cloud';
 import { PlayerTrajectoryLines } from './telemetry/player-trajectory-lines';
 import { FragLineField } from './telemetry/frag-line-field';
+import { PlayerCursorMesh } from './telemetry/player-cursor-mesh';
 
 
 
@@ -67,6 +68,7 @@ export function Scene({ manifest, map, points, frags }: SceneProps) {
                 <PlayerPointCloud payload={points} />
                 <PlayerTrajectoryLines manifest={manifest} />
                 <FragLineField payload={frags} />
+                <PlayerCursorMesh manifest={manifest} />
 
 
             </Canvas>
